@@ -50,7 +50,7 @@
 
 
     const getTags = (phone) => {
-        fetch('https://agent-dev-api.accuhit.com.tw/api/phones/tags',{
+        fetch('https://agent-api.accuhit.com.tw/api/phones/tags',{
           body: JSON.stringify({phone}),
           method: 'POST',
           headers: {
