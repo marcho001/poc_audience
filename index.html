@@ -6,8 +6,74 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
+<div class="p-8 text-center" >
 
+    <input id="input"  class="border rounded mr-4 p-2"/>
+    <button id="submit" class="p-2 rounded bg-blue-500 text-white">Submit</button>
+</div>
+<div class="text-center" id="tag-wrapper">
+
+</div>
+<script>
+    const inputEl = document.querySelector('#input');
+    const submitBtn = document.querySelector('#submit');
+    const tagWrapper = document.querySelector('#tag-wrapper');
+    submitBtn.addEventListener('click', () => {
+        if (inputEl.value === ''){
+          window.alert('請輸入電話')
+          return
+        }
+        const phone = inputEl.value;
+        getTags(phone);
+    })
+
+    let isComposing = false;
+    inputEl.addEventListener('keydown', (e) => {
+      if(e.keyCode === 13 && isComposing === false){
+        if(inputEl.value === '' || !/^09[0-9]{8}$/.test(inputEl.value)){
+          window.alert('請輸入手機號碼')
+          return
+        }
+        const phone = inputEl.value;
+        getTags(phone);
+      }
+    })
+    inputEl.addEventListener('compositionstart', (e) => {
+      isComposing = true
+    })
+    inputEl.addEventListener('compositionend', (e) => {
+      isComposing = false
+    })
+
+
+    const getTags = (phone) => {
+        fetch('https://agent-dev-api.accuhit.com.tw/api/phones/tags',{
+          body: JSON.stringify({phone}),
+          method: 'POST',
+          headers: {
+            "content-type": "application/json"
+          },
+        })
+          .then((res) => {
+            const status = res.status
+            if (status === 400){
+              tagWrapper.innerHTML = ''
+              window.alert('這個電話沒有標籤資料')
+            }
+            return res.json()
+          })
+          .then((tags) =>{
+            tags.forEach(tag => {
+              tagWrapper.innerHTML += `<div class="inline-block rounded-full shadow px-4 py-2 bg-blue-300 m-1">${tag}</div>`
+            })
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+    }
+</script>
 </body>
 </html>
