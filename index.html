@@ -13,7 +13,9 @@
 
     <input id="input"  class="border rounded mr-4 p-2"/>
     <button id="submit" class="p-2 rounded bg-blue-500 text-white">Submit</button>
+
 </div>
+<div id="loading"></div>
 <div class="text-center" id="tag-wrapper">
 
 </div>
@@ -48,8 +50,15 @@
       isComposing = false
     })
 
+    const addLoadingText = (isLoading) => {
+        const loadingEl = document.querySelector('#loading')
+        loadingEl.innerHTML = isLoading ? 'loading...' : ''
+    }
+
+
 
     const getTags = (phone) => {
+        addLoadingText(true)
         fetch('https://agent-api.accuhit.com.tw/api/phones/tags',{
           body: JSON.stringify({phone}),
           method: 'POST',
@@ -63,9 +72,14 @@
               tagWrapper.innerHTML = ''
               window.alert('這個電話沒有標籤資料')
             }
+            if (status > 400){
+              window.alert('api error')
+            }
+            addLoadingText(false)
             return res.json()
           })
           .then((tags) =>{
+            tagWrapper.innerHTML = ''
             tags.forEach(tag => {
               tagWrapper.innerHTML += `<div class="inline-block rounded-full shadow px-4 py-2 bg-blue-300 m-1">${tag}</div>`
             })
