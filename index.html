@@ -59,7 +59,7 @@
 
     const getTags = (phone) => {
         addLoadingText(true)
-        fetch('https://agent-api.accuhit.com.tw/api/phones/tags',{
+        fetch('https://agent-api.accuhit.com.tw/api/members/phones/tags',{
           body: JSON.stringify({phone}),
           method: 'POST',
           headers: {
