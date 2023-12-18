@@ -81,7 +81,7 @@
           .then((tags) =>{
             tagWrapper.innerHTML = ''
             tags.forEach(tag => {
-              tagWrapper.innerHTML += `<div class="inline-block rounded-full shadow px-4 py-2 bg-blue-300 m-1">${tag}</div>`
+              tagWrapper.innerHTML += `<div class="inline-block rounded-full shadow px-4 py-2 bg-blue-300 m-1">${tag.name}</div>`
             })
           })
           .catch((err) => {
